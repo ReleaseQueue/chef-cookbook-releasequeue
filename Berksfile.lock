@@ -1,0 +1,10 @@
+DEPENDENCIES
+  apt (~> 2.8.2)
+  chef-cookbook-releasequeue
+    path: .
+    metadata: true
+
+GRAPH
+  apt (2.8.2)
+  chef-cookbook-releasequeue (0.1.0)
+    apt (~> 2.8.2)
