@@ -1,61 +1,37 @@
 chef-cookbook-releasequeue Cookbook
 ====================
-TODO: Enter the cookbook description here.
+This cookbook contains a resource/provider for configuring apt and rpm repositories for your applications defined in Releasequeue so that packages added to your application version should be available for install via apt/yum.
 
-e.g.
-This cookbook makes your favorite breakfast sandwich.
 
 Requirements
 ------------
-TODO: List your cookbook requirements. Be sure to include any requirements this cookbook has on platforms, libraries, other cookbooks, packages, operating systems, etc.
 
-e.g.
-#### packages
-- `toaster` - chef-cookbook-releasequeue needs toaster to brown your bagel.
+#### Cookbooks
+- `apt`
+- `yum`
+- `chef_gem`
 
-Attributes
-----------
-TODO: List your cookbook attributes here.
+#### Platforms
+- Debian, Ubuntu
+- CentOS, Red Hat, Fedora
 
-e.g.
-#### chef-cookbook-releasequeue::default
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['chef-cookbook-releasequeue']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
 
 Usage
 -----
-#### chef-cookbook-releasequeue::default
-TODO: Write usage instructions for each cookbook.
 
-e.g.
-Just include `chef-cookbook-releasequeue` in your node's `run_list`:
+chef_cookbook_releasequeue_application "application_name" do
+  version     "version"
+  email       "your_email@you.com"
+  password    "your_password"
+  local_user  "user_name_on_node"
+  local_group "group_name_on_node"
+  action      :setup
+end
 
-```json
-{
-  "name":"my_node",
-  "run_list": [
-    "recipe[chef-cookbook-releasequeue]"
-  ]
-}
-```
 
 Contributing
 ------------
-TODO: (optional) If this is a public cookbook, detail the process for contributing. If this is a private cookbook, remove this section.
 
-e.g.
 1. Fork the repository on Github
 2. Create a named feature branch (like `add_component_x`)
 3. Write your change
@@ -63,6 +39,3 @@ e.g.
 5. Run the tests, ensuring they all pass
 6. Submit a Pull Request using Github
 
-License and Authors
--------------------
-Authors: TODO: List authors

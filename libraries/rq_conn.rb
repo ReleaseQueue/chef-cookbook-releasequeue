@@ -5,7 +5,7 @@ require "uri"
 
 class RqConn
 
-  BASE_URL = "http://api.releasequeue.com:4000"
+  BASE_URL = "http://api.releasequeue.com"
 
   def initialize(email, password)
     @email = email

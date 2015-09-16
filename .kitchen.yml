@@ -1,0 +1,26 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  #- name: ubuntu-14.04-i386
+  #- name: centos-6.6-i386
+  - name: debian-6.0.8-i386
+  - name: fedora-20-i386
+
+suites:
+  - name: server
+    run_list:
+      - recipe[rq_test::default]
+    attributes: {"rq_test": {
+      "email":        '<%= ENV['RQ_EMAIL'] %>',
+      "password":     '<%= ENV['RQ_PASSWORD'] %>',
+      "local_user":   "vagrant",
+      "local_group":  "vagrant",
+      "rq_ip":        '<%= ENV['RQ_IP'] %>'
+      }
+    }
+

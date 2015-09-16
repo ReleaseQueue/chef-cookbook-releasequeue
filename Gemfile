@@ -6,4 +6,4 @@ gem "kitchen-vagrant"
 gem "net-ssh"
 gem "berkshelf-vagrant"
 gem "netrc"
-
+gem 'serverspec'

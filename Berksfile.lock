@@ -3,8 +3,18 @@ DEPENDENCIES
   chef-cookbook-releasequeue
     path: .
     metadata: true
+  chef_gem
+  rq_test
+    path: test/cookbooks/rq_test
+  yum
 
 GRAPH
   apt (2.8.2)
   chef-cookbook-releasequeue (0.1.0)
     apt (~> 2.8.2)
+    chef_gem (~> 0.1.0)
+    yum (>= 0.0.0)
+  chef_gem (0.1.0)
+  rq_test (0.1.0)
+    chef-cookbook-releasequeue (>= 0.0.0)
+  yum (3.7.1)
