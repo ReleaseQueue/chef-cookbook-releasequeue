@@ -43,6 +43,11 @@ def apt_setup()
       group local_group
     end
 
+    #on some debian setups apt doesnt support https repos by default
+    apt_package 'apt-transport-https' do
+      action :install
+    end
+
     repos["deb"].each do |deb_repo|
       repo_name = "#{@new_resource.name}_#{deb_repo['distribution']}"
 
@@ -71,7 +76,7 @@ def yum_setup()
 
       rpm_repo['components'].each do |component|
         url = "#{rpm_repo['url']}/#{rpm_repo['distribution']}/#{component}"
-        url.sub!('http://', "http://#{email}:#{password}@")
+        url.sub!('https://', "https://#{email}:#{password}@")
         yum_repository repo_name do
           description "Repo for #{name}"
           baseurl url

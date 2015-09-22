@@ -6,10 +6,10 @@ provisioner:
   name: chef_solo
 
 platforms:
-  - name: ubuntu-14.04-i386
-  - name: centos-6.6-i386
-  - name: debian-6.0.8-i386
-  - name: fedora-20-i386
+  #- name: ubuntu-14.04-i386
+  #- name: centos-6.6-i386
+  - name: debian-8.2-i386
+  #- name: fedora-20-i386
 
 suites:
   - name: server

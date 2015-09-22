@@ -15,6 +15,7 @@ params = JSON.parse(IO.read("/tmp/kitchen/dna.json"))
 rq_ip = params['rq_test']['rq_ip']
 
 file = Chef::Util::FileEdit.new("/etc/hosts")
+file.insert_line_if_no_match("/releasequeue.com/", "#{rq_ip} releasequeue.com")
 file.insert_line_if_no_match("/api.releasequeue.com/", "#{rq_ip} api.releasequeue.com")
 file.write_file
 
