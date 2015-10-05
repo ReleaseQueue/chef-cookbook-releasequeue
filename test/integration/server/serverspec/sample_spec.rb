@@ -1,10 +1,10 @@
 require 'serverspec'
 
-describe file('/etc/yum.repos.d/app1_dist1.repo'), :if => ['redhat', 'fedora'].include?(os[:family]) do
-  its(:content) { should match /api.releasequeue.com\/users\/admin\/applications\/app1\/1.0\/rpm\/dist1\/comp1/ }
+describe file('/etc/yum.repos.d/app1.repo'), :if => ['redhat', 'fedora'].include?(os[:family]) do
+  its(:content) { should match /api.releasequeue.com\/users\/admin\/applications\/app1\/1.0\/rpm\/.*\/comp1/ }
 end
 
-describe file('/etc/apt/sources.list.d/app1_dist1.list'), :if => ['debian', 'ubuntu'].include?(os[:family])  do
+describe file('/etc/apt/sources.list.d/app1.list'), :if => ['debian', 'ubuntu'].include?(os[:family])  do
   its(:content) { should match /api.releasequeue.com\/users\/admin\/applications\/app1\/1.0\/deb/ }
 end
 

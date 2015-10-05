@@ -16,6 +16,26 @@ action :setup do
 
 end
 
+def get_code_name()
+  if node["lsb"]["codename"]
+    codename = node["lsb"]["codename"]
+  else
+      case node['platform_family']
+      when "rhel", "fedora"
+        contents = IO.read("/etc/redhat-release")
+        codename = /\((.*)\)/.match(contents).captures[0]
+      when "debian"
+        contents = IO.read("/etc/os-release")
+        codename = /^VERSION=(.*)"$/.match(contents).captures[0]
+      end
+  end
+  if codename
+    return codename.gsub(/\s+/, "").downcase()
+  else
+    return ""
+  end
+end
+
 def apt_setup()
   converge_by("Setup apt repo for #{@new_resource.name} #{@new_resource.version}") do
 
@@ -48,14 +68,21 @@ def apt_setup()
       action :install
     end
 
-    repos["deb"].each do |deb_repo|
-      repo_name = "#{@new_resource.name}_#{deb_repo['distribution']}"
+    node_dist_name = get_code_name()
 
-      apt_repository repo_name do
-        uri           deb_repo['url']
-        components    deb_repo['components']
-        distribution  deb_repo["distribution"]
+    repos["deb"].each do |deb_repo|
+      repo_name = "#{@new_resource.name}"
+
+      dist_name = deb_repo["distribution"].gsub(/\s+/, "").downcase()
+
+      if node_dist_name.include?(dist_name)
+        apt_repository repo_name do
+          uri           deb_repo['url']
+          components    deb_repo['components']
+          distribution  deb_repo["distribution"]
+        end
       end
+
     end
   end
 end
@@ -70,19 +97,24 @@ def yum_setup()
     email = CGI::escape(@new_resource.email)
     password = CGI::escape(@new_resource.password)
 
+    node_dist_name = get_code_name
+
     repos["rpm"].each do |rpm_repo|
       puts rpm_repo
-      repo_name = "#{name}_#{rpm_repo['distribution']}"
+      dist_name = rpm_repo["distribution"].gsub(/\s+/, "").downcase()
 
-      rpm_repo['components'].each do |component|
-        url = "#{rpm_repo['url']}/#{rpm_repo['distribution']}/#{component}"
-        url.sub!('https://', "https://#{email}:#{password}@")
-        yum_repository repo_name do
-          description "Repo for #{name}"
-          baseurl url
-          action :create
+      if node_dist_name.include?(dist_name)
+        rpm_repo['components'].each do |component|
+          url = "#{rpm_repo['url']}/#{rpm_repo['distribution']}/#{component}"
+          url.sub!('https://', "https://#{email}:#{password}@")
+          yum_repository name do
+            description "Repo for #{name}"
+            baseurl url
+            action :create
+          end
         end
       end
+
     end
   end
 end
