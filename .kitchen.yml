@@ -16,11 +16,11 @@ suites:
     run_list:
       - recipe[rq_test::default]
     attributes: {"rq_test": {
-      "email":        '<%= ENV['RQ_EMAIL'] %>',
-      "password":     '<%= ENV['RQ_PASSWORD'] %>',
+      "username":     "<%= ENV['RQ_USERNAME'] %>",
+      "api_key":      "<%= ENV['RQ_API_KEY'] %>",
       "local_user":   "vagrant",
       "local_group":  "vagrant",
-      "rq_ip":        '<%= ENV['RQ_IP'] %>'
+      "rq_ip":        "<%= ENV['RQ_IP'] %>"
       }
     }
 

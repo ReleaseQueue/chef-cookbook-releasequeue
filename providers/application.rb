@@ -39,8 +39,8 @@ end
 def apt_setup()
   converge_by("Setup apt repo for #{@new_resource.name} #{@new_resource.version}") do
 
-    email = @new_resource.email
-    password = @new_resource.password
+    username = @new_resource.username
+    api_key = @new_resource.api_key
 
     repos = get_app_versions_from_server
 
@@ -49,7 +49,7 @@ def apt_setup()
     home = Dir.home(local_user)
     netrc_path = "#{home}/.netrc"
     netrc_data = ::Netrc.read(netrc_path)
-    netrc_data['api.releasequeue.com'] = email, password
+    netrc_data['api.releasequeue.com'] = api_key, ""
     netrc_data.save
     FileUtils.chown(local_user,
                     local_group,
@@ -94,8 +94,8 @@ def yum_setup()
     repos = get_app_versions_from_server
 
     name = @new_resource.name
-    email = CGI::escape(@new_resource.email)
-    password = CGI::escape(@new_resource.password)
+    username = CGI::escape(@new_resource.username)
+    api_key = CGI::escape(@new_resource.api_key)
 
     node_dist_name = get_code_name
 
@@ -106,7 +106,7 @@ def yum_setup()
       if node_dist_name.include?(dist_name)
         rpm_repo['components'].each do |component|
           url = "#{rpm_repo['url']}/#{rpm_repo['distribution']}/#{component}"
-          url.sub!('https://', "https://#{email}:#{password}@")
+          url.sub!('https://', "https://#{api_key}@")
           yum_repository name do
             description "Repo for #{name}"
             baseurl url
@@ -120,7 +120,6 @@ def yum_setup()
 end
 
 def get_app_versions_from_server()
-  rq_conn = RqConn.new(@new_resource.email, @new_resource.password)
-  rq_conn.sign_in
+  rq_conn = RqConn.new(@new_resource.username, @new_resource.api_key)
   rq_conn.get_app_version_info(@new_resource.name, @new_resource.version)
 end
